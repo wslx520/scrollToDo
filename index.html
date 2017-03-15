@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>ScrollToDo 示例</title>
+    <style>
+        .fixed-holder,.true-fixed {
+            height: 110px;
+        }
+        .true-fixed {
+            background-color: #ddd;
+        }
+        /* 固定到顶部位置 */
+        .fixed-top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background-color: #000;
+            color: #fff;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body>
+    本示例实现了一个滚动时固定到顶部的效果
+    <div style="height:200px;background: #f5f5f5;">高200</div>
+    <div class="fixed-holder">
+        <div class="true-fixed" id="true-fixed">此区域会随着滚动变成固定定位（或取消固定定位）</div>
+    </div>
+    <div style="height:1200px;background: #eee;">高1200</div>
+    <p>
+        注：可根据本页使用方式，简单封装轻松实现一个【滚动固定定位】的小组件(我就是这么干的)。
+    </p>
+    <script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+    <script src="ScrollToDo.js"></script>
+    <script>
+        var scrollPin = new ScrollToDo({
+            scroller: window
+        }).on('scroll', function (directions) {
+            // directions 是方向，其中包含 X，Y，分别对应水平方向与垂直方向
+            var _scroller = this.scroller;
+            // 这个表示当滚动距离超过此值时，发生变化
+            var boundary = 200;
+            var pinClass = 'fixed-top';
+            var pinner = $('#true-fixed');
+            var isPin = pinner.hasClass(pinClass);
+            if (directions.Y === 1 && this.scrollTop > boundary && !isPin) {
+                pinner.addClass(pinClass);
+            }
+            else if (directions.Y === -1 && this.scrollTop < boundary && isPin) {
+                pinner.removeClass(pinClass);
+            }
+        });
+        console.log(scrollPin)
+    </script>
+</body>
+</html>
